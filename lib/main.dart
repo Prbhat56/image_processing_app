@@ -11,21 +11,23 @@ import 'package:image_processing_app/presentation/bloc/image_bloc.dart';
 import 'package:image_processing_app/presentation/screens/home_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocProvider(
-        create: (context) => ImageBloc(
-          pickImage: PickImage(ImageRepositoryImpl(LocalDataSource())),
-          processImage: ProcessImage(ImageRepositoryImpl(LocalDataSource())),
-          saveImage: SaveImage(ImageRepositoryImpl(LocalDataSource())),
-          loadImageFromUrl: LoadImageFromUrl(ImageRepositoryImpl(LocalDataSource())),
-        ),
-        child: HomePage(), // Ensure HomePage is the child of BlocProvider
+    return BlocProvider(
+      create: (context) => ImageBloc(
+        pickImage: PickImage(ImageRepositoryImpl(LocalDataSource())),
+        processImage: ProcessImage(ImageRepositoryImpl(LocalDataSource())),
+        saveImage: SaveImage(ImageRepositoryImpl(LocalDataSource())),
+        loadImageFromUrl: LoadImageFromUrl(ImageRepositoryImpl(LocalDataSource())),
+      ),
+      child: const MaterialApp(
+        home: HomePage(), // Now HomePage is inside the BlocProvider
       ),
     );
   }
