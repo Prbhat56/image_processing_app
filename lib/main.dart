@@ -27,6 +27,7 @@ class MyApp extends StatelessWidget {
         loadImageFromUrl: LoadImageFromUrl(ImageRepositoryImpl(LocalDataSource())),
       ),
       child: const MaterialApp(
+        debugShowCheckedModeBanner: false,
         home: HomePage(), // Now HomePage is inside the BlocProvider
       ),
     );
