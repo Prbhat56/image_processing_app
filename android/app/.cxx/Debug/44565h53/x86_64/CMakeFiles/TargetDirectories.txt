@@ -1,0 +1,2 @@
+C:/Users/prabh/Documents/emotorad_project/image_processing_app/android/app/.cxx/Debug/44565h53/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/prabh/Documents/emotorad_project/image_processing_app/android/app/.cxx/Debug/44565h53/x86_64/CMakeFiles/rebuild_cache.dir
