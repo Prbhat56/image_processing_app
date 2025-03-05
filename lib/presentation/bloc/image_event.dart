@@ -25,6 +25,15 @@ class ProcessImageEvent extends ImageEvent {
   @override
   List<Object> get props => [imagePath, filterType];
 }
+class ProcessImageEventWithoutIsolate extends ImageEvent {
+  final String imagePath;
+  final String filterType;
+  
+  const ProcessImageEventWithoutIsolate(this.imagePath, this.filterType);
+  
+  @override
+  List<Object> get props => [imagePath, filterType];
+}
 
 class SaveImageEvent extends ImageEvent {
   final String imagePath;

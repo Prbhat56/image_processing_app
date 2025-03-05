@@ -5,6 +5,7 @@ import 'package:image_processing_app/data/repositories/data_repositories.dart';
 import 'package:image_processing_app/domain/usecases/image_url_save.dart';
 import 'package:image_processing_app/domain/usecases/pick_image.dart';
 import 'package:image_processing_app/domain/usecases/process_image.dart';
+import 'package:image_processing_app/domain/usecases/process_image_without_isolate.dart';
 import 'package:image_processing_app/domain/usecases/save_image.dart';
 
 import 'package:image_processing_app/presentation/bloc/image_bloc.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       create: (context) => ImageBloc(
         pickImage: PickImage(ImageRepositoryImpl(LocalDataSource())),
         processImage: ProcessImage(ImageRepositoryImpl(LocalDataSource())),
+         processImageWithoutIsolate: ProcessImageWithoutIsolate(ImageRepositoryImpl(LocalDataSource())),
         saveImage: SaveImage(ImageRepositoryImpl(LocalDataSource())),
         loadImageFromUrl: LoadImageFromUrl(ImageRepositoryImpl(LocalDataSource())),
       ),

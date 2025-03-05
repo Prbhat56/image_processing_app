@@ -32,4 +32,10 @@ Future<bool> saveImage(String imagePath) async {
     final path = await localDataSource.loadImageFromUrl(url);
     return ImageEntity(path);
   }
+  @override
+   @override
+  Future<ImageEntity> processImageWithoutIsolate(String imagePath, String filterType) async {
+    final path = await localDataSource.processImageWithoutIsolate(imagePath, filterType);
+    return ImageEntity(path);
+  }
 }

@@ -4,8 +4,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image_processing_app/domain/usecases/image_url_save.dart';
 import 'package:image_processing_app/domain/usecases/pick_image.dart';
 import 'package:image_processing_app/domain/usecases/process_image.dart';
+import 'package:image_processing_app/domain/usecases/process_image_without_isolate.dart';
 import 'package:image_processing_app/domain/usecases/save_image.dart';
-
 
 part 'image_event.dart';
 part 'image_state.dart';
@@ -15,15 +15,18 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
   final ProcessImage processImage;
   final SaveImage saveImage;
   final LoadImageFromUrl loadImageFromUrl;
+  final ProcessImageWithoutIsolate processImageWithoutIsolate;
 
   ImageBloc({
     required this.pickImage,
     required this.processImage,
     required this.saveImage,
     required this.loadImageFromUrl,
+    required this.processImageWithoutIsolate,
   }) : super(ImageInitial()) {
     on<PickImageEvent>(_onPickImage);
     on<ProcessImageEvent>(_onProcessImage);
+     on<ProcessImageEventWithoutIsolate>(_onProcessImageWithoutIsolate);
     on<SaveImageEvent>(_onSaveImage);
     on<LoadImageFromUrlEvent>(_onLoadImageFromUrl);
   }
@@ -38,10 +41,21 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
     }
   }
 
-  void _onProcessImage(ProcessImageEvent event, Emitter<ImageState> emit) async {
+  void _onProcessImage(
+      ProcessImageEvent event, Emitter<ImageState> emit) async {
     emit(ImageLoading());
     try {
       final imageEntity = await processImage(event.imagePath, event.filterType);
+      emit(ImageProcessed(imageEntity.path));
+    } catch (e) {
+      emit(ImageError('Failed to process image: $e'));
+    }
+  }
+   void _onProcessImageWithoutIsolate(
+      ProcessImageEventWithoutIsolate event, Emitter<ImageState> emit) async {
+    emit(ImageLoading());
+    try {
+      final imageEntity = await processImageWithoutIsolate(event.imagePath, event.filterType);
       emit(ImageProcessed(imageEntity.path));
     } catch (e) {
       emit(ImageError('Failed to process image: $e'));
@@ -58,7 +72,8 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
     }
   }
 
-  void _onLoadImageFromUrl(LoadImageFromUrlEvent event, Emitter<ImageState> emit) async {
+  void _onLoadImageFromUrl(
+      LoadImageFromUrlEvent event, Emitter<ImageState> emit) async {
     emit(ImageLoading());
     try {
       final imageEntity = await loadImageFromUrl(event.url);

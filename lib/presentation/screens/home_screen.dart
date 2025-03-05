@@ -47,10 +47,21 @@ class HomePage extends StatelessWidget {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
+                      // Apply filter with isolates
                       context.read<ImageBloc>().add(
                           ProcessImageEvent(state.imagePath, 'grayscale'));
                     },
-                    child: const Text('Apply Grayscale'),
+                    child: const Text('Apply Grayscale with Isolates'),
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Apply filter without isolates and run heavy computation
+                      _runHeavyComputation();
+                      context.read<ImageBloc>().add(
+                          ProcessImageEventWithoutIsolate(state.imagePath, 'grayscale'));
+                    },
+                    child: const Text('Apply Grayscale without Isolates'),
                   ),
                 ],
               );
@@ -180,5 +191,20 @@ class HomePage extends StatelessWidget {
         );
       },
     );
+  }
+
+  // Function to simulate a heavy computation
+  void _runHeavyComputation() {
+    const int n = 1000000000; // 1 billion
+    double sum = 0;
+
+    final startTime = DateTime.now();
+    for (int i = 1; i <= n; i++) {
+      sum += i; // Add each number to the sum
+    }
+    final endTime = DateTime.now();
+
+    print('Heavy computation result: $sum');
+    print('Time taken: ${endTime.difference(startTime).inSeconds} seconds');
   }
 }
