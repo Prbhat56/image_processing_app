@@ -1,7 +1,7 @@
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart';
 import 'dart:io';
-import 'dart:isolate'; 
+import 'dart:isolate';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
@@ -23,30 +23,32 @@ class LocalDataSource {
     final outputPath = join(directory.path, 'processed_image.png');
 
     final receivePort = ReceivePort();
-
+    print(4);
     await Isolate.spawn(
       _processImageInIsolate,
       {
         'imagePath': imagePath,
         'filterType': filterType,
         'outputPath': outputPath,
-        'sendPort': receivePort.sendPort, 
+        'sendPort': receivePort.sendPort,
       },
     );
-
+    print(2);
+    
     await for (var message in receivePort) {
       if (message is String) {
-        return message; 
+        print(3);
+        return message;
       } else if (message is Exception) {
-        throw message; 
+        throw message;
       }
     }
-
+    print(5);
     throw Exception('Failed to process image');
   }
 
-
-  Future<String> processImageWithoutIsolate(String imagePath, String filterType) async {
+  Future<String> processImageWithoutIsolate(
+      String imagePath, String filterType) async {
     try {
       // Load the image
       final image = decodeImage(File(imagePath).readAsBytesSync())!;
@@ -68,7 +70,8 @@ class LocalDataSource {
   Future<String> saveImage(String imagePath) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final fileName = 'saved_image_${DateTime.now().millisecondsSinceEpoch}.png';
+      final fileName =
+          'saved_image_${DateTime.now().millisecondsSinceEpoch}.png';
       final savedPath = join(directory.path, fileName);
 
       await File(imagePath).copy(savedPath);
@@ -88,7 +91,8 @@ class LocalDataSource {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode != 200) {
-        throw Exception('Failed to download image: HTTP ${response.statusCode}');
+        throw Exception(
+            'Failed to download image: HTTP ${response.statusCode}');
       }
 
       final directory = await getTemporaryDirectory();
@@ -122,7 +126,7 @@ void _processImageInIsolate(Map<String, dynamic> params) {
 
     // Apply the filter
     final processedImage = _applyFilter(image, filterType);
-
+    print(1);
     // Save the processed image
     File(outputPath).writeAsBytesSync(encodePng(processedImage));
 

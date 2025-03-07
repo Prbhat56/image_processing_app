@@ -9,6 +9,8 @@ import 'package:image_processing_app/domain/usecases/process_image_without_isola
 import 'package:image_processing_app/domain/usecases/save_image.dart';
 
 import 'package:image_processing_app/presentation/bloc/image_bloc.dart';
+import 'package:image_processing_app/presentation/screens/demo_screen.dart';
+import 'package:image_processing_app/presentation/screens/demo_screen_second.dart';
 import 'package:image_processing_app/presentation/screens/home_screen.dart';
 
 void main() {
